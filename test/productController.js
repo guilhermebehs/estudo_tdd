@@ -46,7 +46,6 @@ describe('Products', () => {
                 const result = productController.create(product);
                 result.should.be.a('number')
                 expect(result).to.be.at.least(3)
-
                 done()
             })
         })
@@ -54,9 +53,10 @@ describe('Products', () => {
         describe('delete', () => {
             it('Validando o retorno do delete', (done) => {
                 const productController = new ProductController();
-                const result2 = productController.delete(2);
-                expect(result2).to.be.at.least(1)
-
+                let result = productController.delete(2);
+                expect(result).to.be.equal('Done')
+                result = productController.delete(2);
+                expect(result).to.be.equal('Id 2 not found')
                 done()
             })
         })
@@ -65,9 +65,10 @@ describe('Products', () => {
         describe('update', () => {
             it('Validando o retorno do update', (done) => {
                 const productController = new ProductController();
-                const result2 = productController.update(1, 1);
-                expect(result2).to.be.at.least(1)
-
+                let result = productController.update(1, 1);
+                expect(result).to.be.equal('Done')
+                result = productController.update(10, 1);
+                expect(result).to.be.equal('Id 10 not found')
                 done()
             })
         })

@@ -20,11 +20,8 @@ class ProductController {
 
         const products = this.getDataFromFile();
 
-        for (let i = 0; i < products.length; i++)
-            if (products[i].id === id)
-                return products[i]
+        return products.find(product => product.id === id) || {}
 
-        return {}
 
     }
 
@@ -32,24 +29,6 @@ class ProductController {
 
         const products = this.getDataFromFile();
         return products;
-    }
-
-    delete(id) {
-
-        const products = this.getDataFromFile();
-        let count = 0;
-        for (let i = 0; i < products.length; i++)
-            if (products[i].id === id) {
-                products.splice(i, 1)
-                count++
-            }
-
-        if (count > 0)
-            this.updateDataInFile(products)
-
-        return count
-
-
     }
 
     create(newProduct) {
@@ -62,21 +41,37 @@ class ProductController {
         return newProduct.id
     }
 
+    delete(id) {
+
+        const products = this.getDataFromFile();
+
+        const productToBeDeleted = products.find(product => product.id === id)
+
+        if (productToBeDeleted) {
+            products.splice((productToBeDeleted.id - 1), 1)
+            this.updateDataInFile(products)
+            return 'Done'
+        }
+
+        return `Id ${id} not found`
+
+
+    }
+
     update(id, price) {
 
         const products = this.getDataFromFile();
 
-        let count = 0;
-        for (let i = 0; i < products.length; i++)
-            if (products[i].id === id) {
-                products[i].price = price
-                count++
-            }
+        const productToBeUpdated = products.find(product => product.id === id)
 
-        if (count > 0)
+        if (productToBeUpdated) {
+            productToBeUpdated.price = price
+            products[productToBeUpdated.id - 1] = productToBeUpdated;
             this.updateDataInFile(products)
+            return 'Done'
+        }
 
-        return count
+        return `Id ${id} not found`
 
     }
 
